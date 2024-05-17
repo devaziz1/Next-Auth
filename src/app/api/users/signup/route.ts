@@ -8,12 +8,12 @@ Connection();
 
 export async function POST(request: NextRequest) {
   try {
-    const reqBody = request.json();
+    const reqBody = await request.json();
     const {
       username,
       email,
       password,
-    }: { username: string; email: string; password: string } = await reqBody;
+    }: { username: string; email: string; password: string } = reqBody;
     console.log(username);
     console.log(email);
     console.log(password);
@@ -41,14 +41,17 @@ export async function POST(request: NextRequest) {
 
     // Send Verification mail
 
-    await sendEmail({email, emailType: "VERIFY",userId: savedUser._id});
+    await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });
 
-    return NextResponse.json({
-        message: "User Created successfully",
-        success: true,
-        savedUser
-    })
+    return new Response(
+      JSON.stringify({ message: "User Created ", success: true, savedUser })
+    );
 
+    // return NextResponse.json({
+    //   message: "User Created successfully",
+    //   success: true,
+    //   savedUser,
+    // });
 
   } catch (error) {
     return NextResponse.json(error);
