@@ -21,6 +21,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log("User found");
+    console.log(user);
+
     const validPassword = await bcryptjs.compare(password, user.password);
 
     if (!validPassword) {

@@ -1,85 +1,61 @@
 "use client";
-import Link from "next/link";
-import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-export default function SignupPage() {
-  const router = useRouter();
-  const [user, setUser] = React.useState({
-    email: "",
-    password: "",
-    username: "",
-  });
-  const [buttonDisabled, setButtonDisabled] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-
-  const onSignup = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.post("/api/users/signup", user);
-      console.log("Signup success", response.data);
-      router.push("/login");
-    } catch (error: any) {
-      console.log("Signup failed", error.message);
-
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (
-      user.email.length > 0 &&
-      user.password.length > 0 &&
-      user.username.length > 0
-    ) {
-      setButtonDisabled(false);
-    } else {
-      setButtonDisabled(true);
-    }
-  }, [user]);
+export default function ProfilePage() {
+const router = useRouter();
+      const logout = async () => {
+        try {
+          await axios.get("/api/users/logout");
+          toast.success("Logout successful");
+          router.push("/login");
+        } catch (error: any) {
+          console.log(error.message);
+          toast.error(error.message);
+        }
+      };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>{loading ? "Processing" : "Signup"}</h1>
-      <hr />
-      <label htmlFor="username">username</label>
-      <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-        id="username"
-        type="text"
-        value={user.username}
-        onChange={(e) => setUser({ ...user, username: e.target.value })}
-        placeholder="username"
-      />
-      <label htmlFor="email">email</label>
-      <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-        id="email"
-        type="text"
-        value={user.email}
-        onChange={(e) => setUser({ ...user, email: e.target.value })}
-        placeholder="email"
-      />
-      <label htmlFor="password">password</label>
-      <input
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-        id="password"
-        type="password"
-        value={user.password}
-        onChange={(e) => setUser({ ...user, password: e.target.value })}
-        placeholder="password"
-      />
-      <button
-        onClick={onSignup}
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
-      >
-        {buttonDisabled ? "No signup" : "Signup"}
-      </button>
-      <Link href="/login">Visit login page</Link>
-    </div>
+    <>
+      <div className="overflow-y-auto sm:p-0 pt-4 pr-4 pb-20 pl-4 bg-gray-800">
+        <div className="flex justify-center items-end text-center min-h-screen sm:block">
+          <div className="bg-gray-500 transition-opacity bg-opacity-75"></div>
+          <span className="hidden sm:inline-block sm:align-middle sm:h-screen">
+            ​
+          </span>
+          <div className="inline-block text-left bg-gray-900 rounded-lg overflow-hidden align-bottom transition-all transform      shadow-2xl sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
+            <div className="items-center w-full mr-auto ml-auto relative max-w-7xl md:px-12 lg:px-24">
+              <div className="grid grid-cols-1">
+                <div className="mt-4 mr-auto mb-4 ml-auto bg-gray-900 max-w-lg">
+                  <div className="flex flex-col items-center pt-6 pr-6 pb-6 pl-6">
+                    <img
+                      src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500"
+                      className="flex-shrink-0 object-cover object-center btn- flex w-16 h-16 mr-auto -mb-8 ml-auto rounded-full shadow-xl"
+                    />
+                    <p className="mt-8 text-2xl font-semibold leading-none text-white tracking-tighter lg:text-3xl">
+                      Aziz Naseer
+                    </p>
+                    <p className="mt-3 text-base leading-relaxed text-center text-gray-200">
+                      I am a fullstack software developer with ReactJS for
+                      frontend and NodeJS for backend
+                    </p>
+                    <div onClick={logout} className="w-full mt-6">
+                      <a
+                        className=" cursor-pointer flex text-center items-center justify-center w-full pt-4 pr-10 pb-4 pl-10 text-base
+                    font-medium text-white bg-indigo-600 rounded-xl transition duration-500 ease-in-out transform
+                    hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        Log Out
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
